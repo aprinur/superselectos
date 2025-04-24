@@ -1,0 +1,4 @@
+SQLAlchemy~=2.0.40
+pandas~=2.2.3
+playwright~=1.51.0
+requests-html~=0.10.0
