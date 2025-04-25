@@ -1,3 +1,4 @@
+import datetime
 import time
 
 from src import get_category_url, get_product_url, get_html_product, get_all_page, check_page, product_parser, \
@@ -6,6 +7,7 @@ from src import get_category_url, get_product_url, get_html_product, get_all_pag
 
 def main(main_url):
     start = time.time()
+    time_start = datetime.datetime.now()
     while True:
         try:
 
@@ -47,7 +49,10 @@ def main(main_url):
             time.sleep(5)
 
     finish = time.time()
-    print(f'Total running time: {finish - start}')
+    finish_time = datetime.datetime.now()
+    print(f'Total running time: {(finish - start) / 3600:.2f} Hours')
+    print(f'Start program {time_start} ')
+    print(f'Finish program {finish_time} ')
 
 
 if __name__ == "__main__":

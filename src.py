@@ -130,9 +130,9 @@ def product_parser(html_page: HTML, category_url: str, category_name: str) -> No
     """
     name = html_page.find('h1[class="det-nom"]', first=True).text if html_page.find('h1[class="det-nom"]',
                                                                                     first=True) else None
-    current_price = html_page.find('div[class="info-middle mb-2"] div[class="right"] span.antes',
+    current_price = html_page.find('div[class="info-middle mb-2"] div[class="right"] span.precio',
                                    first=True).text if html_page.find(
-        'div[class="info-middle mb-2"] div[class="right"] span.antes', first=True) else None
+        'div[class="info-middle mb-2"] div[class="right"] span.precio', first=True) else None
     actual_price = html_page.find('div[class="col-md-6 det-info"] span[class="antes"]', first=True).text if (
         html_page.find('div[class="col-md-6 det-info"] span[class="antes"]')) else None
     description = html_page.find('.det-des p', first=True).text if html_page.find('.det-des p', first=True) else None
