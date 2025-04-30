@@ -16,7 +16,7 @@ def get_category_url(main_url: str) -> dict[str, str]:
     :return: Dict of category name and its URL
     """
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=False)
+        browser = p.chromium.launch(headless=True)
         context = browser.new_context(
             viewport={
                 'width': 1920,

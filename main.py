@@ -44,13 +44,16 @@ def main(main_url):
             export_to_file()
 
             break
-        except Exception:
-            print(f'Internet connection error ')
+        except ConnectionError as e:
+            print(f'Internet connection error: {e} ')
             time.sleep(5)
+        except Exception as e:
+            print(f'Scraping error: {e}')
+            break
 
     finish = time.time()
     finish_time = datetime.datetime.now()
-    print(f'Total running time: {(finish - start) / 3600:.2f} Hours')
+    print(f'Total running time: {(finish - start) / 3600:.1f} Hours')
     print(f'Start program {time_start} ')
     print(f'Finish program {finish_time} ')
 
