@@ -16,7 +16,7 @@ def get_category_url(main_url: str) -> dict[str, str]:
     :return: Dict of category name and its URL
     """
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        browser = p.chromium.launch(headless=False)
         context = browser.new_context(
             viewport={
                 'width': 1920,
@@ -25,9 +25,9 @@ def get_category_url(main_url: str) -> dict[str, str]:
         page = context.new_page()
 
         page.goto(main_url, wait_until='domcontentloaded')
-
+        page.wait_for_timeout(5)
         while True:
-            if 'rz-dialog rz-modal-image-viewer rz-modal-centered' in page.content():
+            if 'rz-dialog-content' in page.content():
                 add_exit(page)
                 continue
             break
@@ -70,6 +70,9 @@ def get_product_url(url_category: str) -> list[str]:
     """
     session = HTMLSession()
     response = session.get(url_category)
+    if not response.html.find('.productos-page-inner .item-producto .prod-nombre .clickeable'):
+        print('Category has no product')
+        return []
     product_url = response.html.find('.productos-page-inner .item-producto .prod-nombre .clickeable')
     product_url = [list(i.links) for i in product_url]
     product_url = [i[0] for i in product_url]
@@ -130,11 +133,13 @@ def product_parser(html_page: HTML, category_url: str, category_name: str) -> No
     """
     name = html_page.find('h1[class="det-nom"]', first=True).text if html_page.find('h1[class="det-nom"]',
                                                                                     first=True) else None
-    current_price = html_page.find('div[class="info-middle mb-2"] div[class="right"] span.precio',
-                                   first=True).text if html_page.find(
-        'div[class="info-middle mb-2"] div[class="right"] span.precio', first=True) else None
+    current_price = html_page.find('div[class="info-middle mb-2"] strong.precio', first=True).text if html_page.find(
+        'div[class="info-middle mb-2"] strong.precio', first=True) else None
     actual_price = html_page.find('div[class="col-md-6 det-info"] span[class="antes"]', first=True).text if (
-        html_page.find('div[class="col-md-6 det-info"] span[class="antes"]')) else None
+        html_page.find('div[class="col-md-6 det-info"] span[class="antes"]')) else html_page.find(
+        'div[class="info-middle mb-2"] strong.precio', first=True).text
+    discount = html_page.find('div[class="col-md-6 det-info"] span[class="ahorro"]', first=True).text if html_page.find(
+        'div[class="col-md-6 det-info"] span[class="ahorro"]') else '$0.00'
     description = html_page.find('.det-des p', first=True).text if html_page.find('.det-des p', first=True) else None
     brand = html_page.find('div[class="info-middle mb-2"] .active', first=True).text if html_page.find(
         'div[class="info-middle mb-2"] .active', first=True) else None
@@ -146,6 +151,7 @@ def product_parser(html_page: HTML, category_url: str, category_name: str) -> No
         Category_Name=category_name,
         Current_Price=current_price,
         Actual_Price=actual_price,
+        Discount=discount,
         Description=description,
         Product_URL=product_url,
         Category_URL=category_url,

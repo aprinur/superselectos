@@ -13,6 +13,7 @@ class Product(Base):
     Brand = Column(String, nullable=True)
     Category_Name = Column(String,)
     Current_Price = Column(String)
+    Discount = Column(String)
     Actual_Price = Column(String)
     Description = Column(String)
     Product_URL = Column(String)

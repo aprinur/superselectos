@@ -41,8 +41,6 @@ def main(main_url):
                     print(f'Parsing product: {product}')
                     save_proceed_url(product)
 
-            export_to_file()
-
             break
         except ConnectionError as e:
             print(f'Internet connection error: {e} ')
@@ -50,6 +48,8 @@ def main(main_url):
         except Exception as e:
             print(f'Scraping error: {e}')
             break
+
+    export_to_file()
 
     finish = time.time()
     finish_time = datetime.datetime.now()
