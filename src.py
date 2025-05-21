@@ -165,10 +165,15 @@ def export_to_file() -> None:
     Exporting database to excel
     :return: None
     """
+    root_dir = os.path.expanduser('~')
+    save_dir = os.path.join(root_dir, 'Downloads')
+
+    excel_path = os.path.join(save_dir, 'Products of super selectos.xlsx')
+    csv_path = os.path.join(save_dir, 'Products of super selectos.csv')
 
     df = pandas.read_sql_table('Product_Information', con=engine)
-    df.to_excel('Products of super selectos.xlsx', index=False, engine='openpyxl')
-    df.to_csv(r'D:\Github\aprinur\superselectos.com\Products of super selectos.csv', index=False)
+    df.to_excel(excel_path, index=False, engine='openpyxl')
+    df.to_csv(csv_path, index=False)
     print('Result saved as Products of super selectos')
 
 
